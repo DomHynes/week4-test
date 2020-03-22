@@ -21,7 +21,12 @@ jobs:
             pip3 install nodejsscan
       - run:
           name: run nodejsscan
-          command: nodejsscan -d ./
+          command: nodejsscan -d ./ -o results.json
+      - store_artifacts:
+          path: ./results.json
+      - run:
+          name: parse sast report
+          command: exit $(cat sast-output.json | jq .total_count.sec)
 
   ci-build:
     docker:
@@ -65,11 +70,11 @@ workflows:
     jobs:
       - ci-build
       - integration-tests:
-        requires:
-          - ci-build
+          requires:
+            - ci-build
       - sast:
-        requires:
-          - ci-build
+          requires:
+            - ci-build
       - pack:
           requires:
             - ci-build
