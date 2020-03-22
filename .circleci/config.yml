@@ -35,6 +35,7 @@ jobs:
           name: run tests
           command: |
             npm run unit-tests
+
   integration-tests:
     docker:
       - image: circleci/node:lts
@@ -63,7 +64,12 @@ workflows:
   build-and-packge:
     jobs:
       - ci-build
-      - integration-tests
+      - integration-tests:
+        requires:
+          - ci-build
+      - sast:
+        requires:
+          - ci-build
       - pack:
           requires:
             - ci-build
