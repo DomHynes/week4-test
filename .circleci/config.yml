@@ -21,9 +21,9 @@ jobs:
             pip3 install nodejsscan
       - run:
           name: run nodejsscan
-          command: nodejsscan -d ./ -o results.json
+          command: nodejsscan -d ./ -o sast-output.json
       - store_artifacts:
-          path: ./results.json
+          path: ./sast-output.json
       - run:
           name: parse sast report
           command: exit $(cat sast-output.json | jq .total_count.sec)
