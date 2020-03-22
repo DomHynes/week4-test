@@ -8,6 +8,21 @@ commands:
             npm install
 
 jobs:
+  sast:
+    docker:
+      - image: circleci/node:lts
+    steps:
+      - checkout
+      - run:
+          name: install nodejsscan
+          command: |
+            sudo apt update
+            sudo apt install python3-pip
+            pip3 install nodejsscan
+      - run:
+          name: run nodejsscan
+          command: nodejsscan -d ./
+
   ci-build:
     docker:
       - image: circleci/node:lts
